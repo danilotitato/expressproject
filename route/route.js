@@ -18,10 +18,28 @@ router.get('/search', (req, res) => {
             console.log("not found!");
             res.status(404).send("not found!");
         } else {
-            console.log("found!");
+            console.log(query.word + " found!");
             res.send(query);
         }
     });
 });
+
+router.post("/addword", (req, res) => {
+    const postedWord = new Word({
+        word: req.body.word,
+        def: req.body.def,
+    });
+
+    console.log(postedWord);
+
+    postedWord.save((err, postedWord) => {
+        if (err) {
+            console.log("addword: " + err);
+            res.status(500).send("An server error occurred: " + err);
+        }
+        console.log(postedWord.word + " saved");
+        res.send(postedWord.word + " saved");
+    });
+})
 
 module.exports = router;
