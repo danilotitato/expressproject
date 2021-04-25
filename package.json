@@ -1,0 +1,23 @@
+{
+  "name": "expressproject",
+  "version": "0.0.1",
+  "description": "Coursera guided project",
+  "main": "app.js",
+  "scripts": {
+    "test": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danilotitato/expressproject.git"
+  },
+  "author": "Danilo Titato",
+  "license": "",
+  "bugs": {
+    "url": "https://github.com/danilotitato/expressproject/issues"
+  },
+  "homepage": "https://github.com/danilotitato/expressproject#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.12.5"
+  }
+}
