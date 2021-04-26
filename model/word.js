@@ -5,7 +5,8 @@ const WordSchema = new Schema(
     {
         word:{
             type:String,
-            required:[true, "Word Required"]
+            required:[true, "Word Required"],
+            unique: true
         },
         def: {
             type:String,
