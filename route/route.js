@@ -3,6 +3,9 @@ const express = require('express');
 const router = express.Router();
 const Word = require('../model/word.js')
 
+const validateInput = require('../util/validateInput.js')
+const isValidStringInput = validateInput.isValidStringInput;
+
 router.get('/random', (req, res) => {
     Word.aggregate( [{ $sample: {size:1} }] ).then(randomWord => {
         console.log("random query");
@@ -13,7 +16,7 @@ router.get('/random', (req, res) => {
 router.get('/search', (req, res) => {
     query = req.query.query;
 
-    if (!query || !(typeof query === 'string' || query instanceof String)) {
+    if (!isValidStringInput(query)) {
         console.log("search: Invalid query");
         res.status(400).send("Invalid query");
         return;
@@ -26,10 +29,10 @@ router.get('/search', (req, res) => {
             console.log("search: not found!");
             res.status(404).send("not found!");
             return;
-        } else {
-            console.log("search: " + query.word + " found!");
-            res.send(query);
         }
+
+        console.log("search: " + query.word + " found!");
+        res.send(query);
     });
 });
 
@@ -39,14 +42,9 @@ router.post("/addword", (req, res) => {
         def: req.body.def,
     });
 
-    if (!(typeof postedWord.word === 'string' || postedWord.word instanceof String)
-            || !(typeof postedWord.def === 'string' || postedWord.def instanceof String)) {
-        console.log("addword: Invalid request");
-        res.status(400).send("Invalid request");
-        return;
-    } else if (!postedWord.word || !postedWord.def) {
-        console.log("addword: Incomplete request");
-        res.status(400).send("Incomplete request, needs word and def");
+    if (!isValidStringInput(postedWord.word) || !isValidStringInput(postedWord.def)) {
+        console.log("addword: Invalid word/definition");
+        res.status(400).send("Invalid word/definition");
         return;
     }
 
