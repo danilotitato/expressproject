@@ -1,9 +1,11 @@
+require('log-timestamp');
 const express = require('express');
 const router = express.Router();
 const Word = require('../model/word.js')
 
 router.get('/random', (req, res) => {
     Word.aggregate( [{ $sample: {size:1} }] ).then(randomWord => {
+        console.log("random query");
         res.send(randomWord);
     });
 });

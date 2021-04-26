@@ -1,3 +1,4 @@
+require('log-timestamp');
 const express = require('express');
 const csv = require('fast-csv');
 const mongoose = require('mongoose');
