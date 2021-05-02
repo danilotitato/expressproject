@@ -1,0 +1,29 @@
+{
+  "name": "expressproject",
+  "version": "0.0.1",
+  "description": "Coursera guided project",
+  "main": "app.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danilotitato/expressproject.git"
+  },
+  "author": "Danilo Titato",
+  "license": "",
+  "bugs": {
+    "url": "https://github.com/danilotitato/expressproject/issues"
+  },
+  "homepage": "https://github.com/danilotitato/expressproject#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "fast-csv": "^4.3.6",
+    "log-timestamp": "^0.3.0",
+    "mongoose": "^5.12.5"
+  },
+  "devDependencies": {
+    "jest": "^26.6.3"
+  }
+}
