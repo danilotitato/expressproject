@@ -2,13 +2,12 @@ require('log-timestamp');
 const express = require('express');
 const router = express.Router();
 const Word = require('../model/word.js')
-
-const validateInput = require('../util/validateInput.js')
-const isValidStringInput = validateInput.isValidStringInput;
+const isValidStringInput = require('../util/validateInput.js').isValidStringInput;
+const {addUnique} = require('../util/db.js');
 
 router.get('/random', (req, res) => {
     Word.aggregate( [{ $sample: {size:1} }] ).then(randomWord => {
-        console.log("random query");
+        console.log("random");
         res.send(randomWord);
     });
 });
@@ -37,36 +36,26 @@ router.get('/search', (req, res) => {
 });
 
 router.post("/addword", (req, res) => {
-    const postedWord = new Word({
+    const newEntry = new Word({
         word: req.body.word,
         def: req.body.def,
     });
 
-    if (!isValidStringInput(postedWord.word) || !isValidStringInput(postedWord.def)) {
+    console.log("addword: " + newEntry);
+
+    if (!isValidStringInput(newEntry.word) || !isValidStringInput(newEntry.def)) {
         console.log("addword: Invalid word/definition");
         res.status(400).send("Invalid word/definition");
         return;
     }
 
-    console.log(postedWord);
+    if (!addUnique(newEntry)) {
+        console.log("addword: adding to db failed");
+        res.status(500).send("A server error occurred");
+        return;
+    }
 
-    Word.findOne({word: postedWord.word}).then(query => {
-        if (!query) {
-            postedWord.save((err, postedWord) => {
-                if (err) {
-                    console.log("addword: " + err);
-                    res.status(500).send("An server error occurred: " + err);
-                    return;
-                }
-                console.log(postedWord.word + " saved");
-                res.send(postedWord.word + " saved");
-            });
-            return;
-        } else {
-            console.log("addword: " + postedWord.word + " already on db!");
-            res.send();
-        }
-    });
+    res.send(newEntry.word + " received!");
 });
 
 module.exports = router;
